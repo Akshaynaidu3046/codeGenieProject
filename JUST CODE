@@ -1,0 +1,28 @@
+from google.colab import drive
+drive.mount('/content/drive')
+
+ls
+
+%cd /content/drive/MyDrive/
+
+!mv app.py /content/drive/MyDrive/
+!mv CodeModel.py /content/drive/MyDrive/
+!mv requirements.txt /content/drive/MyDrive/
+
+!pip install streamlit transformers torch pyngrok
+
+from pyngrok import ngrok
+ngrok.set_auth_token("2yiSX9MqQx2PpL9KDp3ZEoSzEO0_3yiskdqJRVXkWFwAt4XaA")
+
+from transformers import pipeline
+
+ # or your model path
+generator = pipeline("text-generation", model="gpt2")
+ # or your model path
+prompt = "give python code for prime numbers"
+result = generator(prompt, max_length=200)
+print(result[0]['generated_text'])
+
+public_url = ngrok.connect(8501)
+print(public_url)
+!streamlit run app.py &
